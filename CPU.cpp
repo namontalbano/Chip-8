@@ -1,7 +1,7 @@
 #include "CPU.h"
 
 CPU::CPU() {
-    _rom.set_file_path("..//ROMS//MISSILE");
+    _rom.set_file_path("..//ROMS//BRIX");
     reset();
 }
 
