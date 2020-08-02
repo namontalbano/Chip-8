@@ -1,2 +1,2 @@
 # Chip-8
-Chip-8 Emulator C++ 
+Chip-8 Emulator in C++ 
