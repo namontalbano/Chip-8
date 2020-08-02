@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.15)
+project(Chip-8)
+
+set(CMAKE_CXX_STANDARD 20)
+
+add_executable(Chip-8 main.cpp CPU.cpp Display.cpp Keyboard.cpp ROM.cpp Instructions.cpp)
+
+INCLUDE(FindPkgConfig)
+
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+
+INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES})
