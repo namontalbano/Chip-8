@@ -160,6 +160,7 @@ void CPU::DRW_DXYN() {
     }
 
     _display.set_draw_flag(true);
+    _display.draw(graphics_);
     pc_ += 2;
 }
 
