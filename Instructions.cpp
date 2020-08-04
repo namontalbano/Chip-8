@@ -1,8 +1,8 @@
 #include "Instructions.h"
 
 void CPU::CLS_00E0() {
-    memset(graphics_, 0, sizeof(graphics_));
-    _display.set_draw_flag(true);
+    memset(output->graphics_, 0, sizeof(output->graphics_));
+    output->set_draw_flag(true);
     pc_ += 2;
 }
 
@@ -145,34 +145,34 @@ void CPU::DRW_DXYN() {
     V_[0xF] = 0;
     for (int yline = 0; yline < n; yline++)
     {
-        pixel = memory_[I_ + yline];
+        pixel = rom->memory_[I_ + yline];
         for(int xline = 0; xline < 8; xline++)
         {
             if((pixel & (0x80 >> xline)) != 0)
             {
-                if(graphics_[(x + xline + ((y + yline) * 64))] == 1)
+                if(output->graphics_[(x + xline + ((y + yline) * 64))] == 1)
                 {
                     V_[0xF] = 1;
                 }
-                graphics_[x + xline + ((y + yline) * 64)] ^= 1;
+                output->graphics_[x + xline + ((y + yline) * 64)] ^= 1;
             }
         }
     }
 
-    _display.set_draw_flag(true);
-    _display.draw(graphics_);
+    output->set_draw_flag(true);
+    output->draw();
     pc_ += 2;
 }
 
 void CPU::SKP_EX9E() {
-    if(key_[V_[(op_code_ & 0x0F00) >> 8]] != 0)
+    if(input->key_[V_[(op_code_ & 0x0F00) >> 8]] != 0)
         pc_ += 4;
     else
         pc_ += 2;
 }
 
 void CPU::SKNP_EXA1() {
-    if(key_[V_[(op_code_ & 0x0F00) >> 8]] == 0)
+    if(input->key_[V_[(op_code_ & 0x0F00) >> 8]] == 0)
         pc_ += 4;
     else
         pc_ += 2;
@@ -188,7 +188,7 @@ void CPU::LD_FX0A() {
 
     for(int i = 0; i < 16; ++i)
     {
-        if(key_[i] != 0)
+        if(input->key_[i] != 0)
         {
             V_[(op_code_ & 0x0F00) >> 8] = i;
             keyPress = true;
@@ -225,15 +225,15 @@ void CPU::LD_FX29() {
 }
 
 void CPU::LD_FX33() {
-    memory_[I_]     = V_[(op_code_ & 0x0F00) >> 8] / 100;
-    memory_[I_ + 1] = (V_[(op_code_ & 0x0F00) >> 8] / 10) % 10;
-    memory_[I_ + 2] = (V_[(op_code_ & 0x0F00) >> 8] % 100) % 10;
+    rom->memory_[I_]     = V_[(op_code_ & 0x0F00) >> 8] / 100;
+    rom->memory_[I_ + 1] = (V_[(op_code_ & 0x0F00) >> 8] / 10) % 10;
+    rom->memory_[I_ + 2] = (V_[(op_code_ & 0x0F00) >> 8] % 100) % 10;
     pc_ += 2;
 }
 
 void CPU::LD_FX55() {
     for (int i = 0; i <= ((op_code_ & 0x0F00) >> 8); ++i)
-        memory_[I_ + i] = V_[i];
+        rom->memory_[I_ + i] = V_[i];
 
     I_ += ((op_code_ & 0x0F00) >> 8) + 1;
     pc_ += 2;}
@@ -241,7 +241,7 @@ void CPU::LD_FX55() {
 void CPU::LD_FX65() {
 
     for (int i = 0; i <= ((op_code_ & 0x0F00) >> 8); ++i)
-        V_[i] = memory_[I_ + i];
+        V_[i] = rom->memory_[I_ + i];
 
     I_ += ((op_code_ & 0x0F00) >> 8) + 1;
     pc_ += 2;

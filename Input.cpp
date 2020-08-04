@@ -1,16 +1,13 @@
-#include "Keyboard.h"
+#include "Input.h"
 
-Keyboard::Keyboard() {}
-Keyboard::~Keyboard() {}
+Input::Input() {}
+Input::~Input() {}
 
-void Keyboard::init() {
-    memset(key, 0, sizeof(key));
-    reset = false;
-    pause = false;
+void Input::reset() {
+    reset_ = false;
+    memset(key_, 0, sizeof(key_));
 }
-
-
-u_int8_t* Keyboard::poll() {
+void Input::poll() {
     SDL_Event e;
 
     while (SDL_PollEvent(&e) != 0){
@@ -18,43 +15,44 @@ u_int8_t* Keyboard::poll() {
             exit(1);
         }
     }
-    memset(key, 0, sizeof(key));
-    const u_int8_t * key_down = SDL_GetKeyboardState(0);
-
+    reset();
+    const u_int8_t * key_down = SDL_GetKeyboardState(nullptr);
     if (key_down[SDL_SCANCODE_1])
-        key[1] = 0xFF;
+        key_[1] = 0xFF;
     if (key_down[SDL_SCANCODE_2])
-        key[2] = 0xFF;
+        key_[2] = 0xFF;
     if (key_down[SDL_SCANCODE_3])
-        key[3] = 0xFF;
+        key_[3] = 0xFF;
     if (key_down[SDL_SCANCODE_4])
-        key[0xC] = 0xFF;
+        key_[0xC] = 0xFF;
     if (key_down[SDL_SCANCODE_Q])
-        key[4] = 0xFF;
+        key_[4] = 0xFF;
     if (key_down[SDL_SCANCODE_W])
-        key[5] = 0xFF;
+        key_[5] = 0xFF;
     if (key_down[SDL_SCANCODE_E])
-        key[6] = 0xFF;
+        key_[6] = 0xFF;
     if (key_down[SDL_SCANCODE_R])
-        key[0xD] = 0xFF;
+        key_[0xD] = 0xFF;
     if (key_down[SDL_SCANCODE_A])
-        key[7] = 0xFF;
+        key_[7] = 0xFF;
     if (key_down[SDL_SCANCODE_S])
-        key[8] = 0xFF;
+        key_[8] = 0xFF;
     if (key_down[SDL_SCANCODE_D])
-        key[9] = 0xFF;
+        key_[9] = 0xFF;
     if (key_down[SDL_SCANCODE_F])
-        key[0xE] = 0xFF;
+        key_[0xE] = 0xFF;
     if (key_down[SDL_SCANCODE_Z])
-        key[0xA] = 0xFF;
+        key_[0xA] = 0xFF;
     if (key_down[SDL_SCANCODE_X])
-        key[0] = 0xFF;
+        key_[0] = 0xFF;
     if (key_down[SDL_SCANCODE_C])
-        key[0xB] = 0xFF;
+        key_[0xB] = 0xFF;
     if (key_down[SDL_SCANCODE_V])
-        key[0xF] = 0xFF;
+        key_[0xF] = 0xFF;
     if (key_down[SDL_SCANCODE_F1])
-        Keyboard::reset = true;
+        reset_ = true;
+    if (key_down[SDL_SCANCODE_P])
+        if (pause_) { pause_ = false; }
+        else if (!pause_) { pause_ = true; }
 
-    return key;
 }

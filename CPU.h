@@ -1,51 +1,44 @@
 #include <cstdint>
 #include <string>
+#include <chrono>
+#include <thread>
 
 #include "Audio.h"
-#include "Display.h"
-#include "Keyboard.h"
+#include "Graphics.h"
+#include "Input.h"
 #include "ROM.h"
 
 class CPU {
 
 public:
 
-    CPU();
+    CPU(Input *input, Graphics *graphics, ROM *rom);
     ~CPU();
 
     void cycle();
     void reset();
-    void input();
-    void output();
-    bool load_memory();
+    void pause(bool pause);
+    void resume(bool pause);
 
-    Audio& audio();
-    Display& display();
-    Keyboard& keyboard();
-    ROM& rom();
+    bool running_ = true;
+    bool paused_ = false;
 
 protected:
 
-    Display _display;
-
     uint16_t pc_;
     uint16_t op_code_;
-    uint16_t  I_;
-    uint16_t  sp_;
+    uint16_t I_;
+    uint16_t sp_;
     uint16_t stack_[16];
     uint16_t delay_timer_;
 
     uint8_t V_[16];
-    uint8_t* memory_;
-    uint8_t* key_;
-    uint8_t graphics_[64 * 32];
     uint8_t sound_timer_;
 
 private:
-    bool running_;
-    Audio _audio;
-    Keyboard _keyboard;
-    ROM _rom;
+    ROM*  rom;
+    Input* input;
+    Graphics* output;
 
     virtual void CLS_00E0();  virtual void RET_00EE();  virtual void SYS_0NNN(); virtual void JMP_1NNN();
     virtual void CALL_2NNN(); virtual void SE_3XKK();   virtual void SNE_4XKK(); virtual void SE_5XY0();

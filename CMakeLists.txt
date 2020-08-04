@@ -3,7 +3,7 @@ project(Chip-8)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Chip-8 main.cpp CPU.cpp Display.cpp Keyboard.cpp ROM.cpp Instructions.cpp)
+add_executable(Chip-8 main.cpp CPU.cpp Graphics.cpp Input.cpp ROM.cpp Instructions.cpp)
 
 INCLUDE(FindPkgConfig)
 

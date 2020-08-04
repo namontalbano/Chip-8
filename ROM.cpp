@@ -2,7 +2,7 @@
 
 ROM::ROM() {
     for (int i = 0; i < 80; ++i) {
-        memory[i] = font_set[i];
+        memory_[i] = font_set[i];
     }
 }
 
@@ -16,7 +16,7 @@ const char *ROM::get_file_path() {
     return file_path_;
 }
 
-uint8_t* ROM::load() {
+void ROM::load() {
 
     printf("Loading ROM: %s\n", file_path_);
 
@@ -44,7 +44,7 @@ uint8_t* ROM::load() {
 
     if ((4096-512) > rom_size){
         for (int i = 0; i < rom_size; ++i) {
-            memory[i + 512] = (uint8_t)rom_buffer[i];
+            memory_[i + 512] = (uint8_t)rom_buffer[i];
         }
     }
     else {
@@ -54,6 +54,4 @@ uint8_t* ROM::load() {
 
     fclose(rom);
     free(rom_buffer);
-
-    return memory;
 }

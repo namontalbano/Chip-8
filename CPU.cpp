@@ -1,15 +1,21 @@
 #include "CPU.h"
 
-CPU::CPU() {
-    _rom.set_file_path("..//ROMS//BRIX");
-    reset();
+CPU::CPU(Input *input, Graphics *graphics, ROM *rom) {
+
+    this->rom = rom;
+    this->input = input;
+    this->output = graphics;
+
+    this->rom->set_file_path("..//ROMS//BRIX");
+    this->rom->load();
+    this->output->init();
+    CPU::reset();
 }
 
  CPU::~CPU() {}
 
 void CPU::reset() {
-    _display.init();
-    _keyboard.init();
+    input->reset();
 
     pc_ = 0x200;
     I_ = 0;
@@ -20,53 +26,15 @@ void CPU::reset() {
 
     memset(V_, 0, sizeof(V_));
     memset(stack_, 0, sizeof(stack_));
-    memset(graphics_, 0, sizeof(graphics_));
+    memset(output->graphics_, 0, sizeof(output->graphics_));
 
-
-    CPU::load_memory();
-    _display.set_draw_flag(false);
-}
-
-bool CPU::load_memory(){
-    memory_ = _rom.load();
-    return memory_ != nullptr;
-}
-
-
-void CPU::input() {
-    key_ = _keyboard.poll();
-
-    if (_keyboard.reset) {
-        reset();
-    }
-}
-
-void CPU::output() {
-    _display.draw(graphics_);
-}
-
-Display& CPU::display() {
-    return _display;
-}
-
-Keyboard& CPU::keyboard() {
-    return _keyboard;
-}
-
-ROM& CPU::rom() {
-    return _rom;
-}
-
-Audio& CPU::audio() {
-    return _audio;
+    output->set_draw_flag(false);
 }
 
 void CPU::cycle() {
-
-    op_code_ = memory_[pc_] << 8 | memory_[pc_ + 1];
+    op_code_ = rom->memory_[pc_] << 8 | rom->memory_[pc_ + 1];
 
     switch (op_code_ & 0xF000) {
-
         case 0x0000:
             switch (op_code_ & 0x000F) {
                 case 0x0000: CLS_00E0(); break;
@@ -123,6 +91,7 @@ void CPU::cycle() {
             break;
         default: INV();
     }
+    if (input->reset_)  CPU::reset();
 
     if (delay_timer_ > 0)
         --delay_timer_;
@@ -131,3 +100,4 @@ void CPU::cycle() {
         --sound_timer_;
 
 }
+
