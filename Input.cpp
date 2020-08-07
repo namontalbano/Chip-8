@@ -1,10 +1,7 @@
 #include "Input.h"
 
-Input::Input() {}
-Input::~Input() {}
-
 void Input::reset() {
-    reset_ = false;
+    _reset = false;
     memset(key_, 0, sizeof(key_));
 }
 void Input::poll() {
@@ -50,9 +47,9 @@ void Input::poll() {
     if (key_down[SDL_SCANCODE_V])
         key_[0xF] = 0xFF;
     if (key_down[SDL_SCANCODE_F1])
-        reset_ = true;
+        _reset = true;
     if (key_down[SDL_SCANCODE_P])
-        if (pause_) { pause_ = false; }
-        else if (!pause_) { pause_ = true; }
+        if (_pause) { _pause = false; }
+        else if (!_pause) { _pause = true; }
 
 }

@@ -1,4 +1,5 @@
 #include "SDL2/SDL.h"
+#include <ctime>
 
 class Graphics {
 
@@ -10,28 +11,33 @@ public:
     void set_title(const char* title);
     void set_size(int width, int height);
     void set_draw_flag(bool draw_flag);
-    void set_rgb(int red, int blue, int green);
+    void set_rgb(int red, int green, int blue);
+    void set_rand_rgb();
+
     void init();
     void draw();
     void render();
 
-    uint8_t graphics_ [2048];
+    uint8_t _graphics [2048];
 
 private:
-    int r_;
-    int g_;
-    int b_;
-    int w_width_;
-    int w_height_;
-    uint32_t pixels_ [2048];
-    uint8_t pixel_;
-    bool draw_flag_;
-    const char* w_title_;
 
-    SDL_Window* sdl_window_;
-    SDL_Renderer* sdl_renderer_;
-    SDL_Texture* sdl_texture_;
+    int _r;
+    int _g;
+    int _b;
+    int _width;
+    int _height;
+    uint32_t _pixels[2048];
+    uint8_t _pixel;
+    bool _drawFlag;
+    bool _randRGB = true;
+    const char* _title;
 
+    SDL_Window* _window;
+    SDL_Renderer* _renderer;
+    SDL_Texture* _texture;
+
+    void random_colors();
 };
 
 

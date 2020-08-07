@@ -2,25 +2,25 @@
 
 ROM::ROM() {
     for (int i = 0; i < 80; ++i) {
-        memory_[i] = font_set[i];
+        _memory[i] = font_set[i];
     }
 }
 
-ROM::~ROM() {}
-
-void ROM::set_file_path(const char *path) {
-    file_path_ = path;
+void ROM::setFilePath(const char *path) {
+    _filePath = path;
+    load();
+    setReloaded(true);
 }
 
-const char *ROM::get_file_path() {
-    return file_path_;
+void ROM::setReloaded(bool reloaded){
+    _reload = reloaded;
 }
 
 void ROM::load() {
 
-    printf("Loading ROM: %s\n", file_path_);
+    printf("Loading ROM: %s\n", _filePath);
 
-    FILE* rom = std::fopen(file_path_, "rb");
+    FILE* rom = std::fopen(_filePath, "rb");
     if (rom == nullptr) {
         std::cerr << "Failed to open ROM" << std::endl;
         exit(3);
@@ -44,7 +44,7 @@ void ROM::load() {
 
     if ((4096-512) > rom_size){
         for (int i = 0; i < rom_size; ++i) {
-            memory_[i + 512] = (uint8_t)rom_buffer[i];
+            _memory[i + 512] = (uint8_t)rom_buffer[i];
         }
     }
     else {

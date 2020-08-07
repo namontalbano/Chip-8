@@ -7,16 +7,18 @@ class ROM {
 public:
 
     ROM();
-    ~ROM();
 
-    uint8_t memory_[4096];
+    uint8_t *getMemory() { return _memory; }
 
     void load();
-    void set_file_path(const char *path);
-    const char *get_file_path();
+    void setFilePath(const char *path);
+
+    void setReloaded(bool reloaded);
+    bool isReloaded() { return _reload; }
 
 private:
-
-    const char *file_path_;
+    const char *_filePath;
+    uint8_t _memory[4096];
+    bool _reload;
 };
 

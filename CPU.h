@@ -13,32 +13,31 @@ class CPU {
 public:
 
     CPU(Input *input, Graphics *graphics, ROM *rom);
-    ~CPU();
 
     void cycle();
     void reset();
-    void pause(bool pause);
-    void resume(bool pause);
 
-    bool running_ = true;
-    bool paused_ = false;
+    bool isRunning() { return _running; };
 
 protected:
 
-    uint16_t pc_;
-    uint16_t op_code_;
-    uint16_t I_;
-    uint16_t sp_;
-    uint16_t stack_[16];
-    uint16_t delay_timer_;
+    uint16_t _pc;
+    uint16_t _op_code;
+    uint16_t _I;
+    uint16_t _sp;
+    uint16_t _stack[16];
+    uint16_t _delay_timer;
 
-    uint8_t V_[16];
-    uint8_t sound_timer_;
+    uint8_t _V[16];
+    uint8_t _sound_timer;
 
 private:
-    ROM*  rom;
-    Input* input;
-    Graphics* output;
+    ROM *_rom;
+    Input *_input;
+    Graphics *_output;
+
+    bool _paused = false;
+    bool _running = true;
 
     virtual void CLS_00E0();  virtual void RET_00EE();  virtual void SYS_0NNN(); virtual void JMP_1NNN();
     virtual void CALL_2NNN(); virtual void SE_3XKK();   virtual void SNE_4XKK(); virtual void SE_5XY0();

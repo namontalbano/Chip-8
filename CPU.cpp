@@ -1,42 +1,36 @@
 #include "CPU.h"
 
-CPU::CPU(Input *input, Graphics *graphics, ROM *rom) {
-
-    this->rom = rom;
-    this->input = input;
-    this->output = graphics;
-
-    this->rom->set_file_path("..//ROMS//BRIX");
-    this->rom->load();
-    this->output->init();
+CPU::CPU(Input *input, Graphics *graphics, ROM *rom) :
+_rom(rom), _input(input), _output(graphics)
+{
+    _rom->setFilePath("..//ROMS//CAVE");
+    _output->init();
     CPU::reset();
 }
 
- CPU::~CPU() {}
-
 void CPU::reset() {
-    input->reset();
+    _input->reset();
+    _rom->setReloaded(false);
 
-    pc_ = 0x200;
-    I_ = 0;
-    sp_ = 0;
-    op_code_ = 0;
-    sound_timer_ = 0;
-    delay_timer_ = 0;
+    _pc = 0x200;
+    _I = 0;
+    _sp = 0;
+    _op_code = 0;
+    _sound_timer = 0;
+    _delay_timer = 0;
 
-    memset(V_, 0, sizeof(V_));
-    memset(stack_, 0, sizeof(stack_));
-    memset(output->graphics_, 0, sizeof(output->graphics_));
+    memset(_V, 0, sizeof(_V));
+    memset(_stack, 0, sizeof(_stack));
+    memset(_output->_graphics, 0, sizeof(_output->_graphics));
 
-    output->set_draw_flag(false);
+    _output->set_draw_flag(false);
 }
 
 void CPU::cycle() {
-    op_code_ = rom->memory_[pc_] << 8 | rom->memory_[pc_ + 1];
-
-    switch (op_code_ & 0xF000) {
+    _op_code = _rom->getMemory()[_pc] << 8 | _rom->getMemory()[_pc + 1];
+    switch (_op_code & 0xF000) {
         case 0x0000:
-            switch (op_code_ & 0x000F) {
+            switch (_op_code & 0x000F) {
                 case 0x0000: CLS_00E0(); break;
                 case 0x000E: RET_00EE(); break;
                 default: INV();
@@ -50,7 +44,7 @@ void CPU::cycle() {
         case 0x6000: LD_6XKK(); break;
         case 0x7000: ADD_7XKK(); break;
         case 0x8000:
-            switch (op_code_ & 0x000F) {
+            switch (_op_code & 0x000F) {
                 case 0x0000: LD_8XY0(); break;
                 case 0x0001: OR_8XY1(); break;
                 case 0x0002: AND_8XY2(); break;
@@ -69,14 +63,14 @@ void CPU::cycle() {
         case 0xC000: RND_CXKK(); break;
         case 0xD000: DRW_DXYN(); break;
         case 0xE000:
-            switch (op_code_ & 0x00FF) {
+            switch (_op_code & 0x00FF) {
                 case 0x009E: SKP_EX9E(); break;
                 case 0x00A1: SKNP_EXA1(); break;
                 default: INV();
             }
             break;
         case 0xF000:
-            switch (op_code_ & 0x00FF) {
+            switch (_op_code & 0x00FF) {
                 case 0x0007: LD_FX07(); break;
                 case 0x000A: LD_FX0A(); break;
                 case 0x0015: LD_FX15(); break;
@@ -91,13 +85,10 @@ void CPU::cycle() {
             break;
         default: INV();
     }
-    if (input->reset_)  CPU::reset();
 
-    if (delay_timer_ > 0)
-        --delay_timer_;
-
-    if (sound_timer_ > 0)
-        --sound_timer_;
-
+    if (_input->isReset())  CPU::reset();
+    if (_rom->isReloaded()) CPU::reset();
+    if (_delay_timer > 0) --_delay_timer;
+    if (_sound_timer > 0) --_sound_timer;
 }
 

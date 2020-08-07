@@ -3,15 +3,17 @@
 class Input {
 
 public:
-    Input();
-    ~Input();
-
     void reset();
     void poll();
 
-    bool pause_;
-    bool reset_;
+    bool isReset() { return _reset; }
+    bool isPaused() { return _pause; }
+
     uint8_t key_[16];
+
+private:
+    bool _pause;
+    bool _reset;
 };
 
 
