@@ -70,10 +70,36 @@ void Graphics::draw() {
         SDL_UpdateTexture(_texture, nullptr, _pixels, 64 * sizeof(Uint32));
     }
     render();
+
+//    for(int i = 0; i < 64*32; i++)
+//    {
+//        if(_graphics[i] == 1)
+//        {
+//            drawPixel(i%64, i/64);
+//        }
+//    }
 }
 
 void Graphics::render() {
     SDL_RenderClear(_renderer);
     SDL_RenderCopy(_renderer, _texture, nullptr, nullptr);
     SDL_RenderPresent(_renderer);
+}
+
+void Graphics::drawPixel(const int x, const int y) {
+    int onePixelX = (int)(1024 - 0) / 64;
+    int onePixelY = (int)(512 - 0) / 32;
+    int scaledX = onePixelX * x;
+    int scaledY = onePixelY * y;
+
+    float vertices[] = {
+            (float)scaledX, (float)scaledY, //Top Left
+            (float)scaledX + onePixelX, (float)scaledY, //Top Right
+            (float)scaledX + onePixelX, (float)scaledY + onePixelY, // Bottom Right
+            (float)scaledX, (float)scaledY + onePixelY // Bottom Left
+    };
+    unsigned int indices[] = {
+            0, 1, 2,
+            0, 3, 2
+    };
 }

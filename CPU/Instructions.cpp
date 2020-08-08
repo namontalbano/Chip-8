@@ -155,6 +155,7 @@ void CPU::DRW_DXYN() {
                     _V[0xF] = 1;
                 }
                 _output->_graphics[x + xline + ((y + yline) * 64)] ^= 1;
+//                drawPixelAt(i%64, i/64);
             }
         }
     }

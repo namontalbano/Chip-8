@@ -17,6 +17,7 @@ public:
     void init();
     void draw();
     void render();
+    void drawPixel(const int x, const int y);
 
     uint8_t _graphics [2048];
 

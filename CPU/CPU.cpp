@@ -3,7 +3,7 @@
 CPU::CPU(Input *input, Graphics *graphics, ROM *rom) :
 _rom(rom), _input(input), _output(graphics)
 {
-    _rom->setFilePath("..//ROMS//CAVE");
+    _rom->setFilePath("..//Memory//ROMS//CAVE");
     _output->init();
     CPU::reset();
 }

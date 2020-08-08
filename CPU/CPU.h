@@ -3,10 +3,10 @@
 #include <chrono>
 #include <thread>
 
-#include "Audio.h"
-#include "Graphics.h"
-#include "Input.h"
-#include "ROM.h"
+#include "../IO/Audio.h"
+#include "../IO/Graphics.h"
+#include "../IO/Input.h"
+#include "../Memory/ROM.h"
 
 class CPU {
 

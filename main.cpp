@@ -1,8 +1,18 @@
-#include "CPU.h"
-#include "Menu.h"
+#include "CPU/CPU.h"
+#include "Window.h"
 
 
 int main(int argc, char* argv[]) {
+
+//    Window window = Window(1024, 512, "Test");
+//    window.init();
+//
+//    while (true) {
+//        window.draw();
+//        window.render();
+//
+//    }
+
     Input input = Input();
     Graphics graphics = Graphics();
     ROM rom = ROM();
@@ -17,4 +27,5 @@ int main(int argc, char* argv[]) {
         std::this_thread::sleep_for(std::chrono::microseconds(2666));
     }
 }
+
 
